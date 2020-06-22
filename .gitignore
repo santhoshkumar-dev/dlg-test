@@ -1,0 +1,4 @@
+venv
+datalake/staging
+tests/resources/input/*
+.idea
