@@ -1,4 +1,4 @@
 venv
 datalake/staging
-tests/resources/input/*
+tests/resources/output/*
 .idea

@@ -12,8 +12,13 @@ class WeatherApp:
         weather.createOrReplaceTempView('weather')
 
     def get_hottest_day(self):
-        self.spark.sql("SELECT  ObservationDate, ScreenTemperature, Region FROM weather "
-                       "WHERE ScreenTemperature = (SELECT MAX(ScreenTemperature) FROM weather)").show(truncate=False)
+        return self.spark.sql("SELECT  ObservationDate, ScreenTemperature, Region FROM weather "
+                              "WHERE ScreenTemperature = (SELECT MAX(ScreenTemperature) FROM weather)")
+
+    def get_coldest_day(self):
+        return self.spark.sql("SELECT ObservationDate, ScreenTemperature, Region FROM weather "
+                              "WHERE ScreenTemperature = ("
+                              "SELECT MIN(ScreenTemperature) FROM weather WHERE ScreenTemperature != -99.0)")
 
 
 if __name__ == '__main__':
@@ -23,3 +28,4 @@ if __name__ == '__main__':
     session = SparkSession.builder.appName("WeatherApp").getOrCreate()
     weather_app = WeatherApp(session, args.input_path)
     weather_app.get_hottest_day()
+    weather_app.get_coldest_day()
